@@ -5,6 +5,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { isUUID } from 'class-validator';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -43,10 +44,15 @@ export class ProductsService {
     return products;
   }
 
-  async findOne(id: string) {
-    const product = await this.productRepository.findOneBy({ id });
+  async findOne(term: string) {
+    let product: Product;
+    if (isUUID(term)) {
+      product = await this.productRepository.findOneBy({ id: term });
+    } else {
+      product = await this.productRepository.findOneBy({ slug: term });
+    }
     if (!product) {
-      throw new NotFoundException(`Product with id ${id} not found`);
+      throw new NotFoundException(`Product with ${term} not found`);
     }
     return product;
   }
