@@ -8,11 +8,11 @@ export class SeedService {
   async executeSeed() {
     await this.productsService.deleteAllProducts();
     const products = initialData.products;
-    const insertPromises = products.map((product) =>
-      this.productsService.create(product),
-    );
+    // const insertPromises = products.map((product) =>
+    //   this.productsService.create(product),
+    // );
 
-    await Promise.all(insertPromises);
+    // await Promise.all(insertPromises);
 
     return `Seeded ${products.length} products`;
   }
